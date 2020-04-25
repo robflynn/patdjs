@@ -5,6 +5,13 @@ const generateId = () => { return Math.floor(Math.random() * 10000) }
 const $INSTANCE_ID = `__patdManager${generateId()}`
 
 class MeowIntent extends Intent {
+  get triggers() {
+    return [
+      'meow',
+      'bark'
+    ]
+  }
+
   perform() {
     console.log("You meow successfully.")
   }
@@ -25,7 +32,7 @@ export default class Patd {
     this.eventManager = new EventManager()
     this._intents = []
 
-
+    this.registerIntent(new MeowIntent())
   }
 
   async process(command) {
@@ -39,11 +46,6 @@ export default class Patd {
   }
 
   async determineUserIntent(command) {
-
-    return new MeowIntent()
-
-    //
-
     let intents = this._intents.filter(intent => intent.isTriggeredBy(command))
 
     if (!intents) { return null }
@@ -53,7 +55,7 @@ export default class Patd {
   }
 
   registerIntent(intent) {
-    this.intents.append(intent)
+    this._intents.push(intent)
   }
 
   buildScenes() {
