@@ -1,25 +1,15 @@
 import Patd from "./patd"
 import Intent from "./intent"
 
-class TakeExitIntent extends Intent {
-  get triggers() {
-    return this.exit.triggers
-  }
+import Exit from "./exit"
+import { TakeExitIntent } from "./intents"
 
-  constructor(exit) {
-    super()
-
-    this.exit = exit
-  }
-
-  perform() {
-    const room = Patd.shared().findRoom(this.exit.roomId)
-
-    Patd.shared().currentRoom = room
-  }
-}
 
 class Room {
+  exits: Array<Exit>
+
+  private _intents: Array<Intent>
+
   get activeIntents() {
     return this._intents
   }
@@ -29,11 +19,11 @@ class Room {
     this.exits = []
   }
 
-  registerIntent(intent) {
+  registerIntent(intent: Intent) {
     this._intents.push(intent)
   }
 
-  addExit(exit) {
+  addExit(exit: Exit) {
     this.exits.push(exit)
 
     let intent = new TakeExitIntent(exit)

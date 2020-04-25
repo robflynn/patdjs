@@ -9,6 +9,10 @@ const generateId = () => { return Math.floor(Math.random() * 10000) }
 const $INSTANCE_ID = `__patdManager${generateId()}`
 
 export default class Patd {
+  eventManager: EventManager
+
+  private _room: Room
+
   static shared() {
     if (window[$INSTANCE_ID] != undefined) {
       return window[$INSTANCE_ID]
@@ -18,16 +22,16 @@ export default class Patd {
     return window[$INSTANCE_ID]
   }
 
-  get currentRoom() {
+  get currentRoom(): Room {
     return this._room
   }
 
-  set currentRoom(room) {
+  set currentRoom(room: Room) {
     let oldValue = this._room
 
     this._room = room
 
-    this.eventManager.emit(Event.playerLeftRoom, oldValue)
+    this.eventManager.emit(Event.playerExitedRoom, oldValue)
     this.eventManager.emit(Event.playerEnteredRoom, room)
   }
 
