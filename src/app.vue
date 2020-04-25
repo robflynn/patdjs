@@ -15,7 +15,7 @@ export default {
 
 	data: () => {
 		return {
-			patd: new Patd(),
+			patd: Patd.shared(),
 		}
 	},
 
