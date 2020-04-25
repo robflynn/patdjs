@@ -18,6 +18,10 @@
         return ""
       },
 
+      exits() {
+        return this.currentRoom.exits.map(exit => exit.direction).join(', ')
+      },
+
       ...mapState([
         'currentRoom'
       ])
@@ -47,6 +51,10 @@ h1 {
 .scene {
   width: 100%;
 }
+
+.exits {
+  margin-bottom: 1em;
+}
 </style>
 
 <template>
@@ -54,6 +62,9 @@ h1 {
     <div v-if="currentRoom" :key="currentRoom.id">
       <h1 class="title">{{ currentRoom.name }}</h1>
       <div class="description" v-html="sceneDescriptionHTML" />
+      <div class="exits">
+        Obvious exits are: {{ this.exits }}
+      </div>
     </div>
   </div>
 </template>
