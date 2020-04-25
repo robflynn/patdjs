@@ -55,10 +55,10 @@ export default class Patd {
   }
 
   get activeIntents() {
-    const qq = [this.intents, this.currentRoom.activeIntents].flatMap(intents => intents)
-    console.log(qq)
-
-    return qq
+    return [
+      this.intents,
+      this.currentRoom.activeIntents
+    ].flatMap(intents => intents)
   }
 
   constructor() {
@@ -107,13 +107,13 @@ export default class Patd {
         id: 1,
         name: "Your Bedroom",
         description: "Messy.\nJean.\nShorts.",
-        activeIntents: () => { return [] }
+        activeIntents: [],
       },
       {
         id: 2,
         name: "Another Room",
         description: "This room is different from the other room.",
-        activeIntents: () => { return [] }
+        activeIntents: [],
       }
     ]
   }

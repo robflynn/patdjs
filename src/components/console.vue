@@ -1,15 +1,34 @@
 <script>
+const Event = require('../lib/events')
+
 import Patd from '../lib/patd'
+
+const patd = Patd.shared()
 
 export default {
   name: 'Console',
   computed: {
     triggers() {
-      return Patd.shared().activeIntents.flatMap(intents => intents.triggers)
+      return patd.activeIntents.flatMap(intents => intents.triggers)
     }
+  },
+
+  mounted() {
+    Object.keys(Event).forEach(key => {
+      patd.eventManager.on(Event[key], (data) => {
+        console.log('📟 ', Event[key], data)
+      })
+    })
   }
 }
 </script>
+
+<style scoped>
+  textarea {
+    width: 400px;
+    height: 100px;
+  }
+</style>
 
 <template>
   <div class="console">
@@ -21,6 +40,5 @@ export default {
         </li>
       </ul>
     </div>
-
   </div>
 </template>
