@@ -12,6 +12,19 @@ export default {
 		Console,
 		PlayerInput
 	},
+
+	data: () => {
+		return {
+			patd: new Patd(),
+		}
+	},
+
+	computed: {
+		scene() {
+			return this.patd.scenes[0]
+		}
+	},
+
 	mounted() {
 		console.log("booted")
 	}
@@ -23,7 +36,7 @@ export default {
 
 <template>
 	<div>
-		<Scene />
+		<Scene :scene="scene"/>
 		<Console />
 		<PlayerInput />
 	</div>

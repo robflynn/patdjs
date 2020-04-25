@@ -1,5 +1,4 @@
 <template>
-  <div>
-    this is the event log/console
+  <div class="console">
   </div>
 </template>
