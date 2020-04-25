@@ -1,26 +1,20 @@
-import Patd from "./patd"
-import Intent from "./intent"
-
 import Exit from "./exit"
 import { TakeExitIntent } from "./intents"
+import GameObject from './game_object';
 
-
-class Room {
+class Room extends GameObject {
+  name: string = "A room"
+  description: string = "A non-descript room."
   exits: Array<Exit>
-
-  private _intents: Array<Intent>
 
   get activeIntents() {
     return this._intents
   }
 
   constructor() {
-    this._intents = []
-    this.exits = []
-  }
+    super()
 
-  registerIntent(intent: Intent) {
-    this._intents.push(intent)
+    this.exits = []
   }
 
   addExit(exit: Exit) {

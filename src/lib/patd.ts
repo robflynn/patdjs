@@ -1,25 +1,27 @@
 const Event = require('./events')
 
+import GameObject from "./game_object"
 import EventManager from "./event_manager"
 
 import Room from "./room"
 import Exit from "./exit"
+import Identifier from './identifier'
+import GameData from "./game_data"
 
 const generateId = () => { return Math.floor(Math.random() * 10000) }
-const $INSTANCE_ID = `__patdManager${generateId()}`
+const $INSTANCE_ID: string = `__patdManager${generateId()}`
 
-export default class Patd {
+export default class Patd extends GameObject {
   eventManager: EventManager
 
   private _room: Room
+  private rooms: Array<Room>
 
-  static shared() {
-    if (window[$INSTANCE_ID] != undefined) {
-      return window[$INSTANCE_ID]
-    }
+  private static _instance: Patd
 
-    window[$INSTANCE_ID] = new Patd()
-    return window[$INSTANCE_ID]
+  static shared(): Patd {
+    console.log(this._instance)
+    return this._instance || (this._instance = new Patd())
   }
 
   get currentRoom(): Room {
@@ -50,38 +52,40 @@ export default class Patd {
   }
 
   constructor() {
+    super()
+
     this.rooms = []
-    this._intents = []
 
     this.eventManager = new EventManager()
 
-    this._room = null
+    this._room = new Room()
   }
 
-  findRoom(roomId) {
+  findRoom(roomId: Identifier) {
     return this.rooms.filter(room => room.id == roomId)[0]
   }
 
-  loadGame(gameData) {
-    gameData.rooms.forEach(room => this.buildRoom(room))
+  loadGame(gameData: GameData) {
+    // tslint:disable-next-line
+    gameData.rooms.forEach((room: any) => this.buildRoom(room))
 
     this.currentRoom = this.rooms[0]
   }
 
-  buildRoom(data) {
+  buildRoom(data: any) {
     let room = new Room()
     room.id = data.id
     room.name = data.name
     room.description = data.description
 
     if (data.exits && data.exits.length > 0) {
-      data.exits.forEach(exitData => room.addExit(this.buildExit(exitData)))
+      data.exits.forEach((exitData: any) => room.addExit(this.buildExit(exitData)))
     }
 
     this.rooms.push(room)
   }
 
-  buildExit(exitData) {
+  buildExit(exitData: any) {
     let exit = new Exit(exitData.direction, exitData.room_id)
     exit.id = exitData.id
 
@@ -89,7 +93,7 @@ export default class Patd {
     return exit
   }
 
-  async process(command) {
+  async process(command: string) {
     console.log("received input: ", command)
 
     let intent = await this.determineUserIntent(command)
@@ -99,7 +103,7 @@ export default class Patd {
     }
   }
 
-  async determineUserIntent(command) {
+  async determineUserIntent(command: string) {
     let input = command.toLowerCase()
     let intents = this.activeIntents.filter(intent => intent.isTriggeredBy(input))
 
@@ -107,10 +111,6 @@ export default class Patd {
     if (intents.length < 0) { return null }
 
     return intents[0]
-  }
-
-  registerIntent(intent) {
-    this._intents.push(intent)
   }
 
   getStartingLocation() {

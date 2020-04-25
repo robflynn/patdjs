@@ -1,19 +1,21 @@
-import PubSub from './pubsub'
-
 export default class EventManager {
+  private _listeners: any
+
   constructor() {
-    this.__pubsub = new PubSub()
+    this._listeners = {}
   }
 
-  on(event, callback) {
-    this.__pubsub.subscribe(event, callback)
+  on(event: string, callback: Function) {
+    if (!this._listeners[event]) {
+      this._listeners[event] = [callback]
+    } else {
+      this._listeners[event].push(callback)
+    }
   }
 
-  off(event, callback) {
-    this.__pubsub.unsubscribe(event, callback)
-  }
-
-  emit(event, data) {
-    this.__pubsub.publish(event, data)
+  emit(event: string, data: Object) {
+    if (this._listeners[event] && this._listeners[event].length > 0) {
+      this._listeners[event].forEach((callback: Function) => callback(data))
+    }
   }
 }
