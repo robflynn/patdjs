@@ -6,28 +6,53 @@ import Intent from "./intent"
 const generateId = () => { return Math.floor(Math.random() * 10000) }
 const $INSTANCE_ID = `__patdManager${generateId()}`
 
+class Exit {
+  constructor(direction, roomId) {
+    this.direction = direction
+    this.roomId = roomId
+  }
+}
+
 class Room {
-  get activeIntents() { return this._intents }
+  get activeIntents() {
+    return this._intents
+  }
 
   constructor() {
     this._intents = []
+    this.exits = []
   }
 
   registerIntent(intent) {
     this._intents.push(intent)
   }
+
+  addExit(exit) {
+    this.exits.push(exit)
+
+    let intent = new TakeExitIntent(exit)
+
+    this.registerIntent(intent)
+  }
 }
 
-class MeowIntent extends Intent {
+class TakeExitIntent extends Intent {
   get triggers() {
-    return [
-      'meow',
-      'bark'
-    ]
+    return [this.exit.direction]
+  }
+
+  constructor(exit) {
+    super()
+
+    this.exit = exit
   }
 
   perform() {
-    console.log("You meow successfully.")
+    const room = Patd.shared().findRoom(this.exit.roomId)
+
+    console.log("moving to: ", room)
+
+    Patd.shared().currentRoom = room
   }
 }
 
@@ -59,20 +84,53 @@ export default class Patd {
   }
 
   get activeIntents() {
-    return [
-      this.intents,
-      this.currentRoom.activeIntents
-    ].flatMap(intents => intents)
+    let intents = [...this.intents]
+
+    if (this.currentRoom) {
+      intents.push(...this.currentRoom.activeIntents)
+    }
+
+    return intents
   }
 
   constructor() {
-    this.rooms = this.buildRooms()
-    this.eventManager = new EventManager()
+    this.rooms = []
     this._intents = []
 
-    this._room = this.getStartingLocation()
+    this.eventManager = new EventManager()
 
-    this.registerIntent(new MeowIntent())
+    this._room = null
+  }
+
+  findRoom(roomId) {
+    return this.rooms.filter(room => room.id == roomId)[0]
+  }
+
+  loadGame(gameData) {
+    gameData.rooms.forEach(room => this.buildRoom(room))
+
+    this.currentRoom = this.rooms[0]
+  }
+
+  buildRoom(data) {
+    let room = new Room()
+    room.id = data.id
+    room.name = data.name
+    room.description = data.description
+
+    if (data.exits && data.exits.length > 0) {
+      data.exits.forEach(exitData => room.addExit(this.buildExit(exitData)))
+    }
+
+    this.rooms.push(room)
+  }
+
+  buildExit(exitData) {
+    let exit = new Exit(exitData.name, exitData.room_id)
+    exit.id = exitData.id
+
+
+    return exit
   }
 
   async process(command) {
@@ -101,32 +159,5 @@ export default class Patd {
   getStartingLocation() {
     // todo: dont hardcode starting location
     return this.rooms[0]
-  }
-
-  buildRooms() {
-    let rooms = []
-
-    let room = new Room()
-    room.id = 1
-    room.name = "Your Room"
-    room.description = "Dirty.\nJean.\nShorts.\n"
-
-    room.registerIntent(Intent.createIntent(['go'],
-      () => Patd.shared().currentRoom = Patd.shared().rooms[1]))
-
-    rooms.push(room)
-
-
-    room = new Room()
-    room.id = 2
-    room.name = "Another Room"
-    room.description = "This is a different room from that other room."
-    rooms.push(room)
-
-    room.registerIntent(Intent.createIntent(['fish'], () => {
-      console.log("Make a fishie do fishie things")
-    }))
-
-    return rooms
   }
 }

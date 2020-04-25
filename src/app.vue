@@ -7,7 +7,11 @@ import Scene from './components/scene'
 import PlayerInput from './components/player_input'
 import Console from './components/console'
 
+const gameData = require('./lib/data')
+
 const patd = Patd.shared()
+
+import { mapState, mapMutations } from 'vuex'
 
 export default {
 	name: 'App',
@@ -20,17 +24,31 @@ export default {
 	data: () => {
 		return {
 			patd: patd,
-			scene: patd.currentRoom
 		}
 	},
 
+	computed: {
+		...mapState([
+			'currentRoom'
+		])
+	},
+
+	methods: {
+		...mapMutations([
+			'setCurrentRoom'
+		])
+	},
+
 	mounted() {
-		console.log("booted")
+		const store = this.$store
 
 		this.patd.eventManager.on(Event.playerEnteredRoom, (room) => {
-			this.scene = room
+			console.log("watty botty ", room)
+			this.setCurrentRoom(room)
 		})
-	}
+
+		this.patd.loadGame(gameData)
+	},
 }
 </script>
 
@@ -39,7 +57,7 @@ export default {
 
 <template>
 	<div>
-		<Scene :scene="scene"/>
+		<Scene />
 		<Console />
 		<PlayerInput />
 	</div>

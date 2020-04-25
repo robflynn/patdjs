@@ -1,5 +1,6 @@
 <script>
   import Patd from "../lib/patd"
+  import { mapState } from 'vuex'
 
   export default {
     name: 'Scene',
@@ -8,19 +9,23 @@
       console.log('scene mounted')
     },
 
-    props: [
-      "scene"
-    ],
-
     computed: {
       sceneDescriptionHTML() {
-        return this.scene.description.split('\n').map((line) => `<p>${line}</p>`).join("\n")
+        if (this.currentRoom) {
+          return this.currentRoom.description.split('\n').map((line) => `<p>${line}</p>`).join("\n")
+        }
+
+        return ""
       },
+
+      ...mapState([
+        'currentRoom'
+      ])
     },
 
     watch: {
-      scene() {
-        console.log("scene changed")
+      currentRoom(newValue, oldValue) {
+        console.log("room changed: ", oldValue, newValue)
       }
     }
   }
@@ -32,8 +37,10 @@
 </style>
 
 <template>
-  <div class="scene">
-    <h1 class="title">{{ scene.name }}</h1>
-    <div class="description" v-html="sceneDescriptionHTML" />
+  <div>
+    <div class="scene" v-if="currentRoom" :key="currentRoom.id">
+      <h1 class="title">{{ currentRoom.name }}</h1>
+      <div class="description" v-html="sceneDescriptionHTML" />
+    </div>
   </div>
 </template>

@@ -8,7 +8,8 @@
   },
   "dependencies": {
     "register-service-worker": "^1.0.0",
-    "vue": "^2.5.13"
+    "vue": "^2.5.13",
+    "vuex": "^3.3.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.0-beta.1",
