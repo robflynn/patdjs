@@ -14,7 +14,17 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 2em;
+
+  background: rgba(255, 255, 255, 0.4);
+  border: solid 1px rgba(255, 255, 255, 0.4);
+  font-size: 2em;
+  color: #fff;
+}
 </style>
 
 <template>

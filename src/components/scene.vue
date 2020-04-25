@@ -31,14 +31,27 @@
   }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+h1 {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: 1.2em;
+}
+
+.description {
+  margin-bottom: 1em;
+  line-height: 1.2em;
+  font-size: 1.1em;
+}
+
 .scene {
+  width: 100%;
 }
 </style>
 
 <template>
-  <div>
-    <div class="scene" v-if="currentRoom" :key="currentRoom.id">
+  <div class="scene">
+    <div v-if="currentRoom" :key="currentRoom.id">
       <h1 class="title">{{ currentRoom.name }}</h1>
       <div class="description" v-html="sceneDescriptionHTML" />
     </div>

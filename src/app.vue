@@ -53,12 +53,38 @@ export default {
 </script>
 
 <style lang="scss">
+	@import "css/reset";
+
+	body,html {
+		font-family: 'Open Sans', sans-serif;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+
+		color: rgba(255, 255, 255, 0.9);
+
+		width: 100%;
+		height: 100%;
+	}
+
+	.app {
+		background-color: #484F60;
+		display: flex;
+
+		padding: 2em;
+	}
+
+	main {
+		display: flex;
+		flex-direction: column;
+	}
 </style>
 
 <template>
-	<div>
-		<Scene />
-		<Console />
-		<PlayerInput />
+	<div class="app">
+		<main>
+			<Scene />
+			<Console />
+			<PlayerInput />
+		</main>
 	</div>
 </template>
