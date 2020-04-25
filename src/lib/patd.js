@@ -6,6 +6,18 @@ import Intent from "./intent"
 const generateId = () => { return Math.floor(Math.random() * 10000) }
 const $INSTANCE_ID = `__patdManager${generateId()}`
 
+class Room {
+  get activeIntents() { return this._intents }
+
+  constructor() {
+    this._intents = []
+  }
+
+  registerIntent(intent) {
+    this._intents.push(intent)
+  }
+}
+
 class GoIntent extends Intent {
   get triggers() {
     return ['go']
@@ -69,7 +81,6 @@ export default class Patd {
     this._room = this.getStartingLocation()
 
     this.registerIntent(new MeowIntent())
-    this.registerIntent(new GoIntent())
   }
 
   async process(command) {
@@ -83,11 +94,10 @@ export default class Patd {
   }
 
   async determineUserIntent(command) {
-    let intents = this._intents.filter(intent => intent.isTriggeredBy(command))
+    let intents = this.activeIntents.filter(intent => intent.isTriggeredBy(command))
 
     if (!intents) { return null }
     if (intents.length < 0) { return null }
-
 
     return intents[0]
   }
@@ -102,19 +112,21 @@ export default class Patd {
   }
 
   buildRooms() {
-    return [
-      {
-        id: 1,
-        name: "Your Bedroom",
-        description: "Messy.\nJean.\nShorts.",
-        activeIntents: [],
-      },
-      {
-        id: 2,
-        name: "Another Room",
-        description: "This room is different from the other room.",
-        activeIntents: [],
-      }
-    ]
+    let rooms = []
+
+    let room = new Room()
+    room.id = 1
+    room.name = "Your Room"
+    room.description = "Dirty.\nJean.\nShorts.\n"
+    room.registerIntent(new GoIntent())
+    rooms.push(room)
+
+    room = new Room()
+    room.id = 2
+    room.name = "Another Room"
+    room.description = "This is a different room from that other room."
+    rooms.push(room)
+
+    return rooms
   }
 }
