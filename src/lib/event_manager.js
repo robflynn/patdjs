@@ -14,8 +14,6 @@ export default class EventManager {
   }
 
   emit(event, data) {
-    console.log("emitting: [", event, "] - ", data)
-
     this.__pubsub.publish(event, data)
   }
 }

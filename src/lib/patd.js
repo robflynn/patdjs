@@ -18,17 +18,6 @@ class Room {
   }
 }
 
-class GoIntent extends Intent {
-  get triggers() {
-    return ['go']
-  }
-
-  perform() {
-    console.log('you go. girl.')
-    Patd.shared().currentRoom = Patd.shared().rooms[1]
-  }
-}
-
 class MeowIntent extends Intent {
   get triggers() {
     return [
@@ -57,8 +46,11 @@ export default class Patd {
   }
 
   set currentRoom(room) {
+    let oldValue = this._room
+
     this._room = room
 
+    this.eventManager.emit(Event.playerLeftRoom, oldValue)
     this.eventManager.emit(Event.playerEnteredRoom, room)
   }
 
@@ -118,14 +110,22 @@ export default class Patd {
     room.id = 1
     room.name = "Your Room"
     room.description = "Dirty.\nJean.\nShorts.\n"
-    room.registerIntent(new GoIntent())
+
+    room.registerIntent(Intent.createIntent(['go'],
+      () => Patd.shared().currentRoom = Patd.shared().rooms[1]))
+
     rooms.push(room)
+
 
     room = new Room()
     room.id = 2
     room.name = "Another Room"
     room.description = "This is a different room from that other room."
     rooms.push(room)
+
+    room.registerIntent(Intent.createIntent(['fish'], () => {
+      console.log("Make a fishie do fishie things")
+    }))
 
     return rooms
   }
