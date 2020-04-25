@@ -1,8 +1,21 @@
+const Event = require('./events')
+
 import EventManager from "./event_manager"
 import Intent from "./intent"
 
 const generateId = () => { return Math.floor(Math.random() * 10000) }
 const $INSTANCE_ID = `__patdManager${generateId()}`
+
+class GoIntent extends Intent {
+  get triggers() {
+    return ['go']
+  }
+
+  perform() {
+    console.log('you go. girl.')
+    Patd.shared().currentRoom = Patd.shared().rooms[1]
+  }
+}
 
 class MeowIntent extends Intent {
   get triggers() {
@@ -31,6 +44,12 @@ export default class Patd {
     return this._room
   }
 
+  set currentRoom(room) {
+    this._room = room
+
+    this.eventManager.emit(Event.playerEnteredRoom, room)
+  }
+
   constructor() {
     this.rooms = this.buildRooms()
     this.eventManager = new EventManager()
@@ -39,6 +58,7 @@ export default class Patd {
     this._room = this.getStartingLocation()
 
     this.registerIntent(new MeowIntent())
+    this.registerIntent(new GoIntent())
   }
 
   async process(command) {
@@ -76,6 +96,11 @@ export default class Patd {
         id: 1,
         name: "Your Bedroom",
         description: "Messy.\nJean.\nShorts.",
+      },
+      {
+        id: 2,
+        name: "Another Room",
+        description: "This room is different from the other room."
       }
     ]
   }
