@@ -27,10 +27,16 @@ export default class Patd {
     return window[$INSTANCE_ID]
   }
 
+  get currentRoom() {
+    return this._room
+  }
+
   constructor() {
-    this.scenes = this.buildScenes()
+    this.rooms = this.buildRooms()
     this.eventManager = new EventManager()
     this._intents = []
+
+    this._room = this.getStartingLocation()
 
     this.registerIntent(new MeowIntent())
   }
@@ -51,6 +57,7 @@ export default class Patd {
     if (!intents) { return null }
     if (intents.length < 0) { return null }
 
+
     return intents[0]
   }
 
@@ -58,7 +65,12 @@ export default class Patd {
     this._intents.push(intent)
   }
 
-  buildScenes() {
+  getStartingLocation() {
+    // todo: dont hardcode starting location
+    return this.rooms[0]
+  }
+
+  buildRooms() {
     return [
       {
         id: 1,

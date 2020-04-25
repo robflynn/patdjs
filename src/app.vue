@@ -14,14 +14,12 @@ export default {
 	},
 
 	data: () => {
-		return {
-			patd: Patd.shared(),
-		}
+		return {}
 	},
 
 	computed: {
 		scene() {
-			return this.patd.scenes[0]
+			return Patd.shared().currentRoom
 		}
 	},
 
