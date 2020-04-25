@@ -50,6 +50,17 @@ export default class Patd {
     this.eventManager.emit(Event.playerEnteredRoom, room)
   }
 
+  get intents() {
+    return this._intents
+  }
+
+  get activeIntents() {
+    const qq = [this.intents, this.currentRoom.activeIntents].flatMap(intents => intents)
+    console.log(qq)
+
+    return qq
+  }
+
   constructor() {
     this.rooms = this.buildRooms()
     this.eventManager = new EventManager()
@@ -96,11 +107,13 @@ export default class Patd {
         id: 1,
         name: "Your Bedroom",
         description: "Messy.\nJean.\nShorts.",
+        activeIntents: () => { return [] }
       },
       {
         id: 2,
         name: "Another Room",
-        description: "This room is different from the other room."
+        description: "This room is different from the other room.",
+        activeIntents: () => { return [] }
       }
     ]
   }

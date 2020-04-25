@@ -1,4 +1,6 @@
 <script>
+  import Patd from "../lib/patd"
+
   export default {
     name: 'Scene',
 
@@ -13,7 +15,7 @@
     computed: {
       sceneDescriptionHTML() {
         return this.scene.description.split('\n').map((line) => `<p>${line}</p>`).join("\n")
-      }
+      },
     },
 
     watch: {
