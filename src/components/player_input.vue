@@ -8,7 +8,7 @@ export default {
       const input = $e.target.value
       $e.target.value = ''
 
-      Patd.shared().emit(Event.inputReceived, input)
+      Patd.shared().process(input)
     }
   }
 }
