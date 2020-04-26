@@ -73,7 +73,7 @@ ${this.environmentalDescriptors}
   get environmentalDescriptors(): string {
     return this.items.filter((item: Item) => item.affectsEnvironment)
                      .map((item: Item) => item.environmental)
-                     .join('\n')
+                     .join('\n\n')
   }
 
   addExit(exit: Exit) {

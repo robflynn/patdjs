@@ -38,12 +38,15 @@ export default class GetItemIntent extends Intent {
     let theItem = this.item.pickUp()
 
     // TODO: How do I want to handle failures/errors. What if this was a locked box or something?
-    if (!theItem) { return }
+    if (!theItem) {
+      this.emit(Event.actionResponse, 'You cannot get that.')
+      return
+    }
 
     Patd.shared().inventory.addItem(theItem)
 
     const response = `You get ${theItem.nameWithArticle}`
 
-    Patd.shared().eventManager.emit(Event.actionResponse, response)
+    this.emit(Event.actionResponse, response)
   }
 }

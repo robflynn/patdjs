@@ -1,8 +1,10 @@
-type TriggerList = Array<string>
+import GameObject from './game_object'
 
-class Intent {
+type TriggerList = string[]
+
+class Intent extends GameObject {
   private _action: Function | null
-  private _triggers: Array<string>
+  private _triggers: string[]
 
   get triggers() { return this._triggers }
   set triggers(triggers) { this._triggers = triggers }
@@ -18,6 +20,8 @@ class Intent {
   }
 
   constructor() {
+    super()
+
     this._triggers = []
     this._action = null
   }

@@ -2,7 +2,7 @@ import GameObject from './game_object'
 import { ExamineItemIntent, GetItemIntent } from './intents'
 
 enum Trait {
-  gettable,
+  gettable = "gettable",
 }
 
 class Item extends GameObject {
@@ -10,6 +10,8 @@ class Item extends GameObject {
   aliases?: string[]
   description?: string
   environmental?: string
+
+  parentContainer?: Container
 
   traits: Trait[]
 
@@ -50,6 +52,10 @@ class Item extends GameObject {
   }
 
   pickUp(): Item | null {
+    if (!this.traits.includes(Trait.gettable)) {
+      return null
+    }
+
     return this
   }
 }

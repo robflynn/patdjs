@@ -10,6 +10,13 @@ module.exports = {
                 "description": "a small, red, wooden mailbox",
                 "environmental": "There is a small mailbox here.",
                 "aliases": ['small mailbox'],
+            },
+            {
+                "name": "banana",
+                "description": "a small, curved, slightly green banana.",
+                "environmental": "A lone banana lies on the ground.",
+                'aliases': ['lone banana', 'nanner'],
+                'traits': ['gettable'],
             }
         ],
         "exits": [

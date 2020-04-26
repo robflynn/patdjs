@@ -119,6 +119,12 @@ export default class Patd extends GameObject {
     item.environmental = itemData.environmental
     item.aliases = itemData.aliases
 
+    if (itemData.traits) {
+      item.traits = itemData.traits
+    }
+
+    console.log(item)
+
     return item
   }
 
