@@ -45,7 +45,7 @@ export default {
   <div class="inventory">
       <h1>Inventory</h1>
       <div class="items">
-        <div class="item" v-for="item in items" :key="item.id">{{ item.name }}</div>
+        <div class="item" v-for="item in items" :key="item.id" :title="item.description">{{ item.name }}</div>
       </div>
   </div>
 </template>

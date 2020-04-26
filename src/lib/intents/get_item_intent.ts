@@ -43,6 +43,8 @@ export default class GetItemIntent extends Intent {
       return
     }
 
+    this.emit(Event.playerPickedUpItem, theItem)
+
     Patd.shared().inventory.addItem(theItem)
 
     const response = `You get ${theItem.nameWithArticle}`

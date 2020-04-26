@@ -82,6 +82,15 @@ export default class Patd extends GameObject {
 
       console.log(triggers.join('\n'))
     }))
+
+    this.eventManager.on(Event.playerPickedUpItem, (item: Item) => {
+      let parent = item.parentContainer
+      if (!parent) { return }
+
+      let removedItem = parent.removeItem(item)
+      if (!removedItem) { return }
+
+    })
   }
 
   findRoom(roomId: Identifier) {

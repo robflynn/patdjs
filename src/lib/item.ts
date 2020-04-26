@@ -1,5 +1,6 @@
 import GameObject from './game_object'
 import { ExamineItemIntent, GetItemIntent } from './intents'
+import { IContainer } from './room'
 
 enum Trait {
   gettable = "gettable",
@@ -11,7 +12,7 @@ class Item extends GameObject {
   description?: string
   environmental?: string
 
-  parentContainer?: Container
+  parentContainer?: IContainer
 
   traits: Trait[]
 
