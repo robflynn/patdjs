@@ -70,7 +70,7 @@ export default {
 		display: flex;
 		height: 100%;
 
-		padding: 2em;
+		padding: 1em;
 	}
 
 	main {
