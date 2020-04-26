@@ -52,9 +52,6 @@ export default class GetItemIntent extends Intent {
     Patd.shared().inventory.addItem(this.item)
 
     this.emit(Event.playerPickedUpItem, theItem)
-
-    const response = `You get ${theItem.nameWithArticle}`
-
-    this.emit(Event.actionResponse, response)
+    this.emit(Event.actionResponse, `You get ${theItem.nameWithArticle}`)
   }
 }

@@ -10,6 +10,7 @@ module.exports = {
                 "description": "a small, red, wooden mailbox",
                 "environmental": "There is a small mailbox here.",
                 "aliases": ['small mailbox'],
+                "traits": ['openable', 'container']
             },
             {
                 "name": "banana",

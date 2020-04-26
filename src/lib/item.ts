@@ -2,11 +2,51 @@ import GameObject from './game_object'
 import { ExamineItemIntent, GetItemIntent, DropItemIntent } from './intents'
 import IContainer from './interfaces/icontainer'
 
+import { use } from "typescript-mix";
+
 enum Trait {
   gettable = "gettable",
+  openable = "openable",
+  container = "container",
+}
+
+enum OpenState {
+  open,
+  closed
+}
+
+interface IOpenable {
+  openState: OpenState
+
+  open(): boolean
+  close(): boolean
+  isOpen(): boolean
+}
+
+const Openable: IOpenable = {
+  openState: OpenState.closed,
+
+  isOpen(): boolean {
+    return this.openState == OpenState.open
+  },
+
+  open(): boolean {
+    this.openState = OpenState.open
+
+    return true
+  },
+
+  close(): boolean {
+    this.openState = OpenState.closed
+
+    return true
+  },
 }
 
 class Item extends GameObject {
+  [x: string]: any;
+  @use( Openable ) this: any
+
   name: string
   aliases?: string[]
   description?: string
@@ -15,6 +55,10 @@ class Item extends GameObject {
   parentContainer?: IContainer
 
   traits: Trait[]
+
+  get isOpenable(): boolean {
+    return this.traits.includes(Trait.openable)
+  }
 
   get affectsEnvironment(): boolean {
     return this.environmental != null && this.environmental != ''
@@ -44,6 +88,10 @@ class Item extends GameObject {
 
     if (this.description) {
       buffer.push(this.description)
+    }
+
+    if (this.isOpenable) {
+      buffer.push(this.isOpen ? "it is open." : "it is closed.")
     }
 
     if (buffer.length == 0) {
