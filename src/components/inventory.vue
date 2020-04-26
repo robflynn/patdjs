@@ -6,7 +6,7 @@ export default {
 
   computed: {
     items() {
-      return Patd.shared().inventory
+      return Patd.shared().inventory.items
     }
   },
 }

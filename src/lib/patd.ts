@@ -35,8 +35,8 @@ export default class Patd extends GameObject {
     return this._instance || (this._instance = new Patd())
   }
 
-  get inventory(): Item[] {
-    return this._inventory.items
+  get inventory(): Inventory {
+    return this._inventory
   }
 
   get currentRoom(): Room {

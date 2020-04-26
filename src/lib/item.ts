@@ -1,5 +1,5 @@
 import GameObject from './game_object'
-import ExamineItemIntent from './intents/examine_item_intent'
+import { ExamineItemIntent, GetItemIntent } from './intents'
 
 class Item extends GameObject {
   name: string
@@ -25,6 +25,7 @@ class Item extends GameObject {
     this.name = name
 
     this.registerIntent(new ExamineItemIntent(this))
+    this.registerIntent(new GetItemIntent(this))
   }
 
   examine(): string {
@@ -39,6 +40,10 @@ class Item extends GameObject {
     }
 
     return buffer.join('\n').trim()
+  }
+
+  pickUp(): Item | null {
+    return this
   }
 }
 
