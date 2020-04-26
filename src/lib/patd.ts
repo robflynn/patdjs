@@ -9,6 +9,7 @@ import Exit from "./exit"
 import Identifier from './identifier'
 import GameData from "./game_data"
 import Item from './item'
+import Intent from './intent'
 
 class Inventory {
   items: Item[]
@@ -75,6 +76,12 @@ export default class Patd extends GameObject {
     this.eventManager = new EventManager()
 
     this._room = new Room()
+
+    this.registerIntent(Intent.createIntent(['intents'], () => {
+      const triggers = this.activeIntents.flatMap((intent: Intent) => intent.triggers)
+
+      console.log(triggers.join('\n'))
+    }))
   }
 
   findRoom(roomId: Identifier) {

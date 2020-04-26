@@ -8,7 +8,23 @@ export default class GetItemIntent extends Intent {
   item: Item
 
   get triggers(): string[] {
-    return ['get']
+    const actions = [
+      'get',
+      'pick up',
+      'loot',
+      'grab',
+      'fetch',
+      'obtain',
+    ]
+
+    const triggers: string[] = []
+
+    actions.forEach((action: string) => {
+      triggers.push(`${action} ${this.item.name}`)
+      triggers.push(`${action} ${this.item.nameWithArticle}`)
+    })
+
+    return triggers.map((trigger: String) => trigger.toLowerCase())
   }
 
   constructor(item: Item) {
