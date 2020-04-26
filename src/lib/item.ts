@@ -1,5 +1,11 @@
 import GameObject from './game_object'
-import { ExamineItemIntent, GetItemIntent, DropItemIntent } from './intents'
+import {
+  ExamineItemIntent,
+  GetItemIntent,
+  DropItemIntent,
+  OpenItemIntent
+} from './intents'
+
 import IContainer from './interfaces/icontainer'
 
 import { use } from "typescript-mix";
@@ -81,6 +87,7 @@ class Item extends GameObject {
     this.registerIntent(new ExamineItemIntent(this))
     this.registerIntent(new GetItemIntent(this))
     this.registerIntent(new DropItemIntent(this))
+    this.registerIntent(new OpenItemIntent(this))
   }
 
   examine(): string {
@@ -91,7 +98,7 @@ class Item extends GameObject {
     }
 
     if (this.isOpenable) {
-      buffer.push(this.isOpen ? "it is open." : "it is closed.")
+      buffer.push(this.isOpen() ? "it is open." : "it is closed.")
     }
 
     if (buffer.length == 0) {

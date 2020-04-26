@@ -7,10 +7,10 @@ export default class EventManager {
 
   on(event: string, callback: Function) {
     if (!this._listeners[event]) {
-      this._listeners[event] = [callback]
-    } else {
-      this._listeners[event].push(callback)
+      this._listeners[event] = []
     }
+
+    this._listeners[event].push(callback)
   }
 
   emit(event: string, data: Object) {

@@ -5,6 +5,7 @@ enum PatdEvent {
   actionResponse = "ACTION_RESPONSE",
   playerPickedUpItem = "PLAYER_PICKED_UP_ITEM",
   playerDroppedItem = "PLAYER_DROPPED_ITEM",
+  playerOpenedItem = "PLAYER_OPENED_ITEM",
 }
 
 module.exports = PatdEvent
