@@ -6,7 +6,7 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
-    currentRoom: null
+    currentRoom: null,
   },
 
   mutations: {

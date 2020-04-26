@@ -10,16 +10,33 @@ import Identifier from './identifier'
 import GameData from "./game_data"
 import Item from './item'
 
+class Inventory {
+  items: Item[]
+
+  constructor() {
+    this.items = []
+  }
+
+  addItem(item: Item) {
+    this.items.push(item)
+  }
+}
+
 export default class Patd extends GameObject {
   eventManager: EventManager
 
   private _room: Room
   private rooms: Array<Room>
+  private _inventory: Inventory
 
   private static _instance: Patd
 
   static shared(): Patd {
     return this._instance || (this._instance = new Patd())
+  }
+
+  get inventory(): Item[] {
+    return this._inventory.items
   }
 
   get currentRoom(): Room {
@@ -53,6 +70,7 @@ export default class Patd extends GameObject {
     super()
 
     this.rooms = []
+    this._inventory = new Inventory()
 
     this.eventManager = new EventManager()
 

@@ -3,8 +3,8 @@ const Event = require('./lib/events')
 
 import Patd from './lib/patd'
 
-import Scene from './components/scene'
 import PlayerInput from './components/player_input'
+import Inventory from './components/inventory'
 import Console from './components/console'
 
 const gameData = require('./lib/data')
@@ -16,8 +16,8 @@ import { mapState, mapMutations } from 'vuex'
 export default {
 	name: 'App',
 	components: {
-		Scene,
 		Console,
+		Inventory,
 		PlayerInput
 	},
 
@@ -84,6 +84,7 @@ export default {
 	<div class="app">
 		<main>
 			<Console />
+			<Inventory />
 			<PlayerInput />
 		</main>
 	</div>

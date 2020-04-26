@@ -18,7 +18,6 @@ export default {
 input {
   width: 100%;
   padding: 10px;
-  margin-top: 2em;
 
   background: rgba(255, 255, 255, 0.4);
   border: solid 1px rgba(255, 255, 255, 0.4);
