@@ -7,11 +7,6 @@ const patd = Patd.shared()
 
 export default {
   name: 'Console',
-  computed: {
-    triggers() {
-      return patd.activeIntents.flatMap(intents => intents.triggers)
-    }
-  },
 
   mounted() {
     Object.keys(Event).forEach(key => {
@@ -19,26 +14,41 @@ export default {
         console.log('📟 ', Event[key], data)
       })
     })
-  }
+
+    patd.eventManager.on(Event.actionResponse, (data) => {
+      this.output(data)
+    })
+
+    patd.eventManager.on(Event.playerEnteredRoom, (room) => {
+      this.output(`<h1 style="font-size: 1.4em;">${room.name}</h1>`)
+      this.output(room.fullDescription)
+      this.output(`\nObvious exits are: ${room.exits.map(exit => exit.direction).join(', ')}`)
+    })
+  },
+
+  methods: {
+    output(message) {
+      const console = this.$refs.console
+
+      console.innerHTML += message.split('\n').join('<br />')
+      console.innerHTML += "<br />"
+    },
+  },
 }
 </script>
 
-<style scoped>
-  textarea {
-    width: 400px;
-    height: 100px;
-  }
+<style lang="scss" scoped>
+.console {
+  background: rgba(0, 255, 0, 0.2);
+  padding: 0.75em;
+  width: 100%;
+  flex-grow: 1;
+
+  font-family: monospace;
+  font-size: 1.2em;
+}
 </style>
 
 <template>
-  <div class="console">
-    <div class="intents">
-      <p><b>intents</b></p>
-      <ul>
-        <li v-for="trigger in triggers">
-          {{ trigger }}
-        </li>
-      </ul>
-    </div>
-  </div>
+  <div ref="console" class="console" />
 </template>

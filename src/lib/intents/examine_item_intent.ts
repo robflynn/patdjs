@@ -31,13 +31,13 @@ export default class ExamineItemIntent extends Intent {
 
       articles.forEach(article => triggers.push(`${action} ${article} ${this.item.name.toLowerCase()}`))
 
-      if (this.item.aliases && this.item.aliases.length > 0) {
-        articles.forEach(article => {
+      articles.forEach(article => {
+        if (this.item.aliases && this.item.aliases.length > 0) {
           this.item.aliases.forEach((alias: string) => {
             triggers.push(`${action} ${article} ${alias.toLowerCase()}`)
           })
-        })
-      }
+        }
+      })
     })
 
     return triggers

@@ -68,6 +68,7 @@ export default {
 	.app {
 		background-color: #484F60;
 		display: flex;
+		height: 100%;
 
 		padding: 2em;
 	}
@@ -75,13 +76,13 @@ export default {
 	main {
 		display: flex;
 		flex-direction: column;
+		width: 100%;
 	}
 </style>
 
 <template>
 	<div class="app">
 		<main>
-			<Scene />
 			<Console />
 			<PlayerInput />
 		</main>
