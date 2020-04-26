@@ -2,17 +2,9 @@ import Exit from "./exit"
 import { TakeExitIntent, ExamineRoomIntent } from "./intents"
 import GameObject from './game_object'
 import Item from './item'
+import IContainer from './interfaces/icontainer'
 
 import { use } from "typescript-mix";
-
-export interface IContainer {
-  items: Array<Item>
-
-  isContainer(): boolean
-  addItem(item: Item): void
-  removeItem(item: Item): void
-  containsItem(item: Item): boolean
-}
 
 const Container: IContainer = {
   items: [],

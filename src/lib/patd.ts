@@ -10,18 +10,7 @@ import Identifier from './identifier'
 import GameData from "./game_data"
 import Item from './item'
 import Intent from './intent'
-
-class Inventory {
-  items: Item[]
-
-  constructor() {
-    this.items = []
-  }
-
-  addItem(item: Item) {
-    this.items.push(item)
-  }
-}
+import Inventory from './inventory'
 
 export default class Patd extends GameObject {
   eventManager: EventManager
@@ -64,6 +53,8 @@ export default class Patd extends GameObject {
       intents.push(...this.currentRoom.activeIntents)
     }
 
+    intents.push(...this.inventory.items.flatMap((item: Item) => item.activeIntents))
+
     return intents
   }
 
@@ -82,15 +73,6 @@ export default class Patd extends GameObject {
 
       console.log(triggers.join('\n'))
     }))
-
-    this.eventManager.on(Event.playerPickedUpItem, (item: Item) => {
-      let parent = item.parentContainer
-      if (!parent) { return }
-
-      let removedItem = parent.removeItem(item)
-      if (!removedItem) { return }
-
-    })
   }
 
   findRoom(roomId: Identifier) {

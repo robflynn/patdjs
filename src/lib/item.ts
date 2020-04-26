@@ -1,6 +1,6 @@
 import GameObject from './game_object'
-import { ExamineItemIntent, GetItemIntent } from './intents'
-import { IContainer } from './room'
+import { ExamineItemIntent, GetItemIntent, DropItemIntent } from './intents'
+import IContainer from './interfaces/icontainer'
 
 enum Trait {
   gettable = "gettable",
@@ -36,6 +36,7 @@ class Item extends GameObject {
 
     this.registerIntent(new ExamineItemIntent(this))
     this.registerIntent(new GetItemIntent(this))
+    this.registerIntent(new DropItemIntent(this))
   }
 
   examine(): string {

@@ -43,9 +43,15 @@ export default class GetItemIntent extends Intent {
       return
     }
 
-    this.emit(Event.playerPickedUpItem, theItem)
+    const parent = theItem.parentContainer
+    if (!parent) { return }
 
-    Patd.shared().inventory.addItem(theItem)
+    let removedItem = parent.removeItem(this.item)
+    if (!removedItem) { return }
+
+    Patd.shared().inventory.addItem(this.item)
+
+    this.emit(Event.playerPickedUpItem, theItem)
 
     const response = `You get ${theItem.nameWithArticle}`
 
