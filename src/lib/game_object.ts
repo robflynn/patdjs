@@ -24,7 +24,7 @@ export default class GameObject {
     this._intents.push(intent)
   }
 
-  emit(event: Event, data: any) {
+  emit(event: string, data: any) {
     Patd.shared().eventManager.emit(event, data)
   }
 }
