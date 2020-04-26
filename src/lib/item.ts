@@ -7,6 +7,7 @@ import {
 } from './intents'
 
 import IContainer from './interfaces/icontainer'
+import { Openable } from './interfaces/openable'
 
 import { use } from "typescript-mix";
 
@@ -14,39 +15,6 @@ enum Trait {
   gettable = "gettable",
   openable = "openable",
   container = "container",
-}
-
-enum OpenState {
-  open,
-  closed
-}
-
-interface IOpenable {
-  openState: OpenState
-
-  open(): boolean
-  close(): boolean
-  isOpen(): boolean
-}
-
-const Openable: IOpenable = {
-  openState: OpenState.closed,
-
-  isOpen(): boolean {
-    return this.openState == OpenState.open
-  },
-
-  open(): boolean {
-    this.openState = OpenState.open
-
-    return true
-  },
-
-  close(): boolean {
-    this.openState = OpenState.closed
-
-    return true
-  },
 }
 
 class Item extends GameObject {
