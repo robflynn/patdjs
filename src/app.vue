@@ -43,7 +43,6 @@ export default {
 		const store = this.$store
 
 		this.patd.eventManager.on(Event.playerEnteredRoom, (room) => {
-			console.log("watty botty ", room)
 			this.setCurrentRoom(room)
 		})
 

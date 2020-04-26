@@ -4,12 +4,11 @@ import GameObject from "./game_object"
 import EventManager from "./event_manager"
 
 import Room from "./room"
+
 import Exit from "./exit"
 import Identifier from './identifier'
 import GameData from "./game_data"
-
-const generateId = () => { return Math.floor(Math.random() * 10000) }
-const $INSTANCE_ID: string = `__patdManager${generateId()}`
+import Item from './item'
 
 export default class Patd extends GameObject {
   eventManager: EventManager
@@ -20,7 +19,6 @@ export default class Patd extends GameObject {
   private static _instance: Patd
 
   static shared(): Patd {
-    console.log(this._instance)
     return this._instance || (this._instance = new Patd())
   }
 
@@ -82,7 +80,21 @@ export default class Patd extends GameObject {
       data.exits.forEach((exitData: any) => room.addExit(this.buildExit(exitData)))
     }
 
+    if (data.items && data.items.length > 0) {
+      data.items.forEach((itemData: any) => room.addItem(this.buildItem(itemData)))
+    }
+
     this.rooms.push(room)
+  }
+
+  buildItem(itemData: any): Item {
+    let item = new Item(itemData.name)
+
+    item.description = itemData.description
+    item.environmental = itemData.environmental
+    item.aliases = itemData.aliases
+
+    return item
   }
 
   buildExit(exitData: any) {

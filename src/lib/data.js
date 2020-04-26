@@ -6,8 +6,10 @@ module.exports = {
         "description": "This is an open field west of a white house, with a boarded front door.",
         "items": [
             {
-              "name": "mailbox",
-                "object": "Mailbox"
+                "name": "mailbox",
+                "description": "a small, red, wooden mailbox",
+                "environmental": "There is a small mailbox here.",
+                "aliases": ['small mailbox'],
             }
         ],
         "exits": [

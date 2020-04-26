@@ -5,14 +5,10 @@
   export default {
     name: 'Scene',
 
-    mounted() {
-      console.log('scene mounted')
-    },
-
     computed: {
       sceneDescriptionHTML() {
         if (this.currentRoom) {
-          return this.currentRoom.description.split('\n').map((line) => `<p>${line}</p>`).join("\n")
+          return this.currentRoom.fullDescription.split('\n').map((line) => `<p style="margin-bottom: 1em;">${line}</p>`).join("\n")
         }
 
         return ""
@@ -26,12 +22,6 @@
         'currentRoom'
       ])
     },
-
-    watch: {
-      currentRoom(newValue, oldValue) {
-        console.log("room changed: ", oldValue, newValue)
-      }
-    }
   }
 </script>
 

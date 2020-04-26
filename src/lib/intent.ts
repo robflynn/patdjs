@@ -24,7 +24,7 @@ class Intent {
 
   isTriggeredBy(command: string) {
     // something simple for now
-    const matches = this.triggers.filter(trigger => command.includes(trigger))
+    const matches = this.triggers.filter(trigger => command == trigger)
 
     return matches.length > 0
   }
