@@ -1,5 +1,5 @@
 import Exit from "./exit"
-import { TakeExitIntent } from "./intents"
+import { TakeExitIntent, ExamineRoomIntent } from "./intents"
 import GameObject from './game_object'
 import Item from './item'
 
@@ -66,6 +66,8 @@ ${this.environmentalDescriptors}
     super()
 
     this.exits = []
+
+    this.registerIntent(new ExamineRoomIntent(this))
   }
 
   get environmentalDescriptors(): string {
@@ -77,9 +79,23 @@ ${this.environmentalDescriptors}
   addExit(exit: Exit) {
     this.exits.push(exit)
 
-    let intent = new TakeExitIntent(exit)
+    this.registerIntent(new TakeExitIntent(exit))
+  }
 
-    this.registerIntent(intent)
+  examine(): string {
+    let buffer: string[] = []
+
+    buffer.push(this.name)
+    buffer.push(this.description)
+
+    this.items.filter((item: Item) => item.affectsEnvironment)
+              .forEach((item: Item) => {
+                if (item.environmental) {
+                  buffer.push(item.environmental)
+                }
+              })
+
+    return buffer.join('\n')
   }
 }
 

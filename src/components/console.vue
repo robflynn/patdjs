@@ -17,6 +17,7 @@ export default {
 
     patd.eventManager.on(Event.actionResponse, (data) => {
       this.output(data)
+      this.output('')
     })
 
     patd.eventManager.on(Event.playerEnteredRoom, (room) => {

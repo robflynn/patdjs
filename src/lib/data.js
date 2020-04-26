@@ -68,12 +68,12 @@ module.exports = {
             {
                 "name": "nest",
                 "traits": ["gettable", "container", "defers"],
-                "environmentalText": "On the branch is a small birds nest.",
+                "environmental": "On the branch is a small birds nest.",
                 "items": [
                     {
                         "name": "egg",
                         "description": "I see nothing special about the jewel-encrusted egg.",
-                        "environmentalText": "In the bird's nest is a large egg encrusted with precious jewels, apparently scavenged somewhere by a childless songbird.  The egg is covered with fine gold inlay, and ornamented in lapis lazuli and mother-of-pearl.  Unlike most eggs, this one is hinged and has a delicate looking clasp holding it closed.  The egg appears extremely fragile.",
+                        "environmental": "In the bird's nest is a large egg encrusted with precious jewels, apparently scavenged somewhere by a childless songbird.  The egg is covered with fine gold inlay, and ornamented in lapis lazuli and mother-of-pearl.  Unlike most eggs, this one is hinged and has a delicate looking clasp holding it closed.  The egg appears extremely fragile.",
                         "traits": ["gettable"]
                     }
                 ]

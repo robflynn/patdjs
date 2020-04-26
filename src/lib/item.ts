@@ -1,11 +1,17 @@
 import GameObject from './game_object'
 import { ExamineItemIntent, GetItemIntent } from './intents'
 
+enum Trait {
+  gettable,
+}
+
 class Item extends GameObject {
   name: string
   aliases?: string[]
   description?: string
   environmental?: string
+
+  traits: Trait[]
 
   get affectsEnvironment(): boolean {
     return this.environmental != null && this.environmental != ''
@@ -23,6 +29,7 @@ class Item extends GameObject {
     super()
 
     this.name = name
+    this.traits = []
 
     this.registerIntent(new ExamineItemIntent(this))
     this.registerIntent(new GetItemIntent(this))
