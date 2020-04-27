@@ -17,7 +17,7 @@ class IntentEngine extends GameObject {
     super()
   }
 
-  async determineIntent(command: string): Intent | null {
+  determineIntent(command: string): Intent | null {
     let intents = Patd.shared().activeIntents.filter(intent => intent.isTriggeredBy(command))
 
     if (!intents) { return null }
@@ -148,7 +148,7 @@ export default class Patd extends GameObject {
   async process(command: string) {
     console.log("received input: ", command)
 
-    let intent = await this.engine.determineIntent(command)
+    let intent = this.engine.determineIntent(command)
 
     if (intent) {
       intent.perform()
