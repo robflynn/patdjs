@@ -12,17 +12,52 @@ import Item from './item'
 import Intent from './intent'
 import Inventory from './inventory'
 
+class IntentEngine extends GameObject {
+  constructor() {
+    super()
+  }
+
+  async determineIntent(command: string): Intent | null {
+    let intents = Patd.shared().activeIntents.filter(intent => intent.isTriggeredBy(command))
+
+    if (!intents) { return null }
+    if (intents.length <= 0) { return null }
+
+    return intents[0]
+  }
+}
+
 export default class Patd extends GameObject {
   eventManager: EventManager
 
   private _room: Room
   private rooms: Array<Room>
   private _inventory: Inventory
+  private engine: IntentEngine
 
   private static _instance: Patd
 
   static shared(): Patd {
     return this._instance || (this._instance = new Patd())
+  }
+
+  constructor() {
+    super()
+
+    this.rooms = []
+    this._inventory = new Inventory()
+
+    this.eventManager = new EventManager()
+
+    this._room = new Room()
+
+    this.registerIntent(Intent.createIntent(['intents'], () => {
+      const triggers = this.activeIntents.flatMap((intent: Intent) => intent.triggers)
+
+      console.log(triggers.join('\n'))
+    }))
+
+    this.engine = new IntentEngine()
   }
 
   get inventory(): Inventory {
@@ -56,23 +91,6 @@ export default class Patd extends GameObject {
     intents.push(...this.inventory.items.flatMap((item: Item) => item.activeIntents))
 
     return intents
-  }
-
-  constructor() {
-    super()
-
-    this.rooms = []
-    this._inventory = new Inventory()
-
-    this.eventManager = new EventManager()
-
-    this._room = new Room()
-
-    this.registerIntent(Intent.createIntent(['intents'], () => {
-      const triggers = this.activeIntents.flatMap((intent: Intent) => intent.triggers)
-
-      console.log(triggers.join('\n'))
-    }))
   }
 
   findRoom(roomId: Identifier) {
@@ -130,7 +148,7 @@ export default class Patd extends GameObject {
   async process(command: string) {
     console.log("received input: ", command)
 
-    let intent = await this.determineUserIntent(command)
+    let intent = await this.engine.determineIntent(command)
 
     if (intent) {
       intent.perform()
@@ -138,13 +156,11 @@ export default class Patd extends GameObject {
   }
 
   async determineUserIntent(command: string) {
-    let input = command.toLowerCase()
-    let intents = this.activeIntents.filter(intent => intent.isTriggeredBy(input))
+    let intent = this.engine.determineIntent(command.toLowerCase())
 
-    if (!intents) { return null }
-    if (intents.length < 0) { return null }
+    if (intent) { return intent }
 
-    return intents[0]
+    return null
   }
 
   getStartingLocation() {
