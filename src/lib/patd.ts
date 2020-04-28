@@ -17,9 +17,11 @@ export default class Patd extends GameObject {
   eventManager: EventManager
 
   private _room: Room
-  private rooms: Array<Room>
+  private rooms: Room[]
   private _inventory: Inventory
   private engine: IntentEngine
+
+  private _objects: any = {}
 
   private static _instance: Patd
 
@@ -37,11 +39,13 @@ export default class Patd extends GameObject {
 
     this._room = new Room()
 
+    /*
     this.registerIntent(Intent.createIntent(['intents'], () => {
       const triggers = this.activeIntents.flatMap((intent: Intent) => intent.triggers)
 
       console.log(triggers.join('\n'))
     }))
+    */
 
     this.engine = new IntentEngine()
   }
@@ -76,11 +80,53 @@ export default class Patd extends GameObject {
 
     intents.push(...this.inventory.items.flatMap((item: Item) => item.activeIntents))
 
-    return intents
+    return intents.filter(intent => intent != undefined)
   }
 
-  get registeredItems(): Item[] {
-    return [...this.rooms.flatMap((room) => room.items), ...this.inventory.items]
+  get nearbyItems() {
+    // items in the room...
+    let items = this.currentRoom.items
+
+    // Stuff you're carrying
+    items.push(...this.inventory.items)
+
+    return items
+  }
+
+  findIntent(name: string): Intent | null {
+    let intents = this.activeIntents
+
+    for (var i = 0; i < intents.length; i++) {
+      let intent = intents[i]
+
+      if (intent.constructor.name == name) {
+        return intent
+      }
+    }
+
+    return null
+  }
+
+  findObject(id: any): GameObject | null {
+    if (this._objects.hasOwnProperty(id)) {
+      return this._objects[id]
+    }
+
+    return null
+  }
+
+  findItem(id: any): Item | null {
+    let object = this.findObject(id)
+
+    if (object == null) { return null }
+
+    if (object instanceof Item) { return object }
+
+    return null
+  }
+
+  registerObject(object: GameObject) {
+    this._objects[object.id] = object
   }
 
   findRoom(roomId: Identifier) {
@@ -123,6 +169,8 @@ export default class Patd extends GameObject {
     }
 
     console.log(item)
+
+    Patd.shared().registerObject(item)
 
     return item
   }

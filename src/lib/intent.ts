@@ -1,47 +1,43 @@
+import Patd from './patd'
 import GameObject from './game_object'
 
-type TriggerList = string[]
+export default class Intent extends GameObject {
+  get verbs(): string[] { return [] }
+  get prepositions(): string[] { return [] }
 
-class Intent extends GameObject {
-  private _action: Function | null
-  private _triggers: string[]
+  perform(tokens: any[]) {}
 
-  get triggers() { return this._triggers }
-  set triggers(triggers) { this._triggers = triggers }
+  parse(tokens: any): any {
+    let directObject = null
+    let target: any = null
+    let preposition = null
+    let prepositionSeen = false
 
-  get actions(): string[] {
-    return []
-  }
+    tokens.forEach((token: any) => {
+      if (token.entityType == 'preposition') {
+        prepositionSeen = true
+        preposition = token.uid
 
-  set action(value: Function) { this._action = value }
+        return
+      }
 
-  static createIntent(triggers: TriggerList, action: Function) {
-    let intent = new Intent()
-    intent.triggers = triggers
-    intent.action = action
+      if (token.entityType == 'item') {
+        if (prepositionSeen && target == null) {
+          target = Patd.shared().findItem(token.uid)
 
-    return intent
-  }
+          return
+        }
 
-  constructor() {
-    super()
+        directObject = Patd.shared().findItem(token.uid)
 
-    this._triggers = []
-    this._action = null
-  }
+        return
+      }
+    })
 
-  isTriggeredBy(command: string) {
-    // something simple for now
-    const matches = this.triggers.filter(trigger => command == trigger)
-
-    return matches.length > 0
-  }
-
-  perform() {
-    if (this._action) {
-      this._action()
+    return {
+      item: directObject,
+      preposition: prepositionSeen ? preposition: null,
+      target: target
     }
   }
 }
-
-export default Intent

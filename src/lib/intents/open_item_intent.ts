@@ -4,41 +4,26 @@ import Intent from "../intent"
 import Item from '../item'
 
 export default class OpenItemIntent extends Intent {
-  private item: Item
-
-  get triggers(): string[] {
-    const actions = [
-      'open',
+  get verbs(): string[] {
+    return [
+      'open'
     ]
-
-    const triggers: string[] = []
-
-    actions.forEach((action: string) => {
-      triggers.push(`${action} ${this.item.name}`)
-      triggers.push(`${action} ${this.item.nameWithArticle}`)
-    })
-
-    return triggers.map((trigger: String) => trigger.toLowerCase())
   }
 
-  constructor(item: Item) {
-    super()
+  perform(tokens: any[]) {
+    let { item } = this.parse(tokens)
 
-    this.item = item
-  }
-
-  perform() {
-    if (!this.item.isOpenable) {
+    if (!item.isOpenable) {
       return this.emit(Event.actionResponse, `It doesn't open.`)
     }
 
-    if (this.item.isOpen()) {
+    if (item.isOpen()) {
       return this.emit(Event.actionResponse, `It's already open.`)
     }
 
-    this.emit(Event.playerOpenedItem, this.item)
-    this.emit(Event.actionResponse, `You open ${this.item.nameWithArticle}.`)
+    this.emit(Event.playerOpenedItem, item)
+    this.emit(Event.actionResponse, `You open ${item.nameWithArticle}.`)
 
-    return this.item.open()
+    return item.open()
   }
 }

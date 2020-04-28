@@ -3,79 +3,107 @@ import Intent from './intent'
 import Item from './item'
 
 const Ner = require('wink-ner')
-const WinkTokenizer = require('wink-tokenizer')
-
-
-/**
- *
- * intents
- *  register action verbs
- *
- *
- * get item intent
- * ===============
- * verbs: get
- * synonyms: grab, pick (up), fetch, loot, carry
- *
- * triggers: :action :item
- *           :action :item :preposition :item
- *           :preposition :item :action :item
- */
-
-
+const winkTokenizer = require('wink-tokenizer')
+const winkTagger = require( 'wink-pos-tagger' );
+const tokenize = winkTokenizer().tokenize
 
 export class IntentEngine {
-  ner = new Ner()
+  private ner: any
+  private knowledge: any = []
 
-  constructor() {
+  get intents(): Intent[] {
+    return Patd.shared().activeIntents
   }
 
-  determineIntent(command: string): Intent | null {
+  get items(): Item[] {
+    return Patd.shared().nearbyItems
+  }
 
-    // TODO: For now we'll re-train every request until we get item registration working
-    let items = Patd.shared().registeredItems
-    let intents = Patd.shared().activeIntents
+  constructor() {
+    this.ner = Ner()
+  }
 
-    let itemTrainingData = this.generateItemTrainingData(items)
-    let actionTrainingData = this.generateActionTrainingData(intents)
+  prepareIntent(intent: Intent) {
+    console.log(intent)
+    let verbs = intent.verbs
+    let intentName = intent.constructor.name
+    let prepositions = intent.prepositions
 
-    this.ner.learn([
-      ...itemTrainingData,
-      ...actionTrainingData
-    ])
+    verbs.forEach(verb => {
+      let data = {
+        text: verb,
+        entityType: 'action',
+        uid: intentName
+      }
 
-    let tokenize = WinkTokenizer().tokenize
+      this.learn(data)
+    })
+
+    prepositions.forEach(preposition => {
+      let data = {
+        text: preposition,
+        entityType: 'preposition',
+        uid: preposition
+      }
+
+      this.learn(data)
+    })
+  }
+
+  prepareItem(item: any) {
+    let data = {
+      text: item.name,
+      entityType: 'item',
+      uid: item.id
+    }
+
+    this.learn(data)
+  }
+
+  learn(data: any) {
+    console.log('learning: ', data)
+
+    this.knowledge.push(data)
+  }
+
+  tokenize(command: string): any {
+    this.ner.learn(this.knowledge)
 
     let tokens = tokenize(command)
 
     tokens = this.ner.recognize(tokens)
 
-    console.log(tokens)
+    const tag = winkTagger().tag
+    tokens = tag(tokens)
+
+    tokens = tokens.filter((token: any) => token.entityType != undefined )
+
+    return tokens
+  }
+
+  determineIntent(command: string): Intent | null {
+    console.log('checking: ', command)
+
+    this.knowledge = []
+
+    this.intents.forEach(intent => this.prepareIntent(intent))
+    this.items.forEach(item => this.prepareItem(item))
+
+    const tokens = this.tokenize(command)
+
+    const potentialIntents = tokens.filter((token: any) => token.entityType == 'action' )
+                                   .map((token: any) => { return token.uid })
+
+    potentialIntents.forEach((potentialIntent: any) => {
+
+      console.log('checking: potentialIntent: ', potentialIntent)
+      let intent = Patd.shared().findIntent(potentialIntent)
+      console.log(Patd.shared().activeIntents)
+      console.log(intent)
+
+      intent.perform(tokens)
+    })
 
     return null
-
-    // let intents = Patd.shared().activeIntents.filter(intent => intent.isTriggeredBy(command))
-
-    if (!intents) {
-      return null
-    }
-
-    if (intents.length <= 0) {
-      return null
-    }
-
-    return intents[0]
-  }
-
-  private generateActionTrainingData(intents: Intent[]): any {
-    return intents.map(intent => {
-      return intent.actions.map(action => {
-        return { text: action, entityType: 'action', uid: intent.constructor.name }
-      })
-    }).filter(array => array.length > 0).flat()
-  }
-
-  private generateItemTrainingData(items: Item[]): any {
-    return items.map(item => { return { text: item.name, entityType: 'item', uid: item.id } })
   }
 }

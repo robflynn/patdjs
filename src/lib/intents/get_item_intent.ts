@@ -5,9 +5,7 @@ import Item from '../item'
 import Patd from '../patd'
 
 export default class GetItemIntent extends Intent {
-  item: Item
-
-  get actions(): string[] {
+  get verbs(): string[] {
     return [
       'get',
       'pickup',
@@ -21,35 +19,17 @@ export default class GetItemIntent extends Intent {
     ]
   }
 
-  get triggers(): string[] {
-    const actions = [
-      'get',
-      'pick up',
-      'loot',
-      'grab',
-      'fetch',
-      'obtain',
+  get prepositions(): string[] {
+    return [
+      'from'
     ]
-
-    const triggers: string[] = []
-
-    actions.forEach((action: string) => {
-      triggers.push(`${action} ${this.item.name}`)
-      triggers.push(`${action} ${this.item.nameWithArticle}`)
-    })
-
-    return triggers.map((trigger: String) => trigger.toLowerCase())
   }
 
-  constructor(item: Item) {
-    super()
+  perform(tokens: any[]) {
+    let { item, preposition, target } = this.parse(tokens)
 
-    this.item = item
-  }
-
-  perform() {
     // Makee sure we can get the item
-    let theItem = this.item.pickUp()
+    let theItem = item.pickUp()
 
     // TODO: How do I want to handle failures/errors. What if this was a locked box or something?
     if (!theItem) {
@@ -60,10 +40,10 @@ export default class GetItemIntent extends Intent {
     const parent = theItem.parentContainer
     if (!parent) { return }
 
-    let removedItem = parent.removeItem(this.item)
+    let removedItem = parent.removeItem(item)
     if (!removedItem) { return }
 
-    Patd.shared().inventory.addItem(this.item)
+    Patd.shared().inventory.addItem(item)
 
     this.emit(Event.playerPickedUpItem, theItem)
     this.emit(Event.actionResponse, `You get ${theItem.nameWithArticle}`)
