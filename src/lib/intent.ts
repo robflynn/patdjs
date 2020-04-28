@@ -9,6 +9,10 @@ class Intent extends GameObject {
   get triggers() { return this._triggers }
   set triggers(triggers) { this._triggers = triggers }
 
+  get actions(): string[] {
+    return []
+  }
+
   set action(value: Function) { this._action = value }
 
   static createIntent(triggers: TriggerList, action: Function) {

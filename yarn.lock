@@ -8360,6 +8360,54 @@ wide-align@^1.1.0:
   dependencies:
     string-width "^1.0.2 || 2"
 
+wink-helpers@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/wink-helpers/-/wink-helpers-2.0.0.tgz#0aec1a2bddd0adcf9e6deb3bf7fa70c7e92dbe5c"
+  integrity sha512-I/ZzXrHcNRXuoeFJmp2vMVqDI6UCK02Tds1WP4kSGAmx520gjL1BObVzF7d2ps24tyHIly9ngdB2jwhlFUjPvg==
+
+wink-lemmatizer@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/wink-lemmatizer/-/wink-lemmatizer-3.0.1.tgz#d0d65c87d1dbc322af7599489bb23c0490f9bcf0"
+  integrity sha512-i3UFptXN8zqRaum4CWBGAXkpK6gtPU9a0/M5U9t2epBd68sr9WX7mFWKfMuSAJoc9w0HXHZOXsuGvTRxjCSWPQ==
+  dependencies:
+    wink-lexicon "^2.0.1"
+    wink-porter2-stemmer "^2.0.0"
+
+wink-lexicon@^2.0.1, wink-lexicon@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/wink-lexicon/-/wink-lexicon-2.1.1.tgz#2966ceceaabb343cae7803441384ad28ddfe9a72"
+  integrity sha512-By1dTZdq0dhHNJlFHjwvOV9tWeijS7T119gt7/JA59W6uVdRdvZ7Yz10TrIbqt70A3ew1ywDvhYwCYc4VuJ7XA==
+
+wink-ner@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/wink-ner/-/wink-ner-2.1.0.tgz#49bb0ca8729d22939ef7bee92b3bb250f8cb6243"
+  integrity sha512-l85RssXEnOn7QgnjI8IPwjeF7/Z9FWpuSeI3Ib9uOQ9jDZN6TddfPR72BZ5VV1Hl5+IeAIvtn42ZVnHVz7CJEA==
+  dependencies:
+    wink-helpers "^2.0.0"
+    wink-lemmatizer "^3.0.1"
+    wink-tokenizer "^5.2.1"
+
+wink-porter2-stemmer@^2.0.0:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/wink-porter2-stemmer/-/wink-porter2-stemmer-2.0.1.tgz#f7680e584e2b9b4c44766642325671662e98f44a"
+  integrity sha512-0g+RkkqhRXFmSpJQStVXW5N/WsshWpJXsoDRW7DwVkGI2uDT6IBCoq3xdH5p6IHLaC6ygk7RWUsUx4alKxoagQ==
+
+wink-pos-tagger@^2.2.2:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/wink-pos-tagger/-/wink-pos-tagger-2.2.2.tgz#bde4079ccf50a7967ce1548c9d4ec15435b24d7a"
+  integrity sha512-+bhkwqwwChqWR75ksFKVJZQagwu404UmnvFjxr+OWZ02/ZJAv19N/iqDpMeYRQRxatk5N+W9pXIKEDJsVrzGyw==
+  dependencies:
+    wink-helpers "^2.0.0"
+    wink-lemmatizer "^3.0.1"
+    wink-lexicon "^2.1.1"
+    wink-porter2-stemmer "^2.0.0"
+    wink-tokenizer "^5.2.1"
+
+wink-tokenizer@^5.2.1:
+  version "5.2.1"
+  resolved "https://registry.yarnpkg.com/wink-tokenizer/-/wink-tokenizer-5.2.1.tgz#3c53fb6fb18dbf75b7da69f1808c0a447721963f"
+  integrity sha512-8WwUToAUvioN6zYCAgtgmqLZEgkLs9whJMVsd/l0NbWynRCz2HreP/YF9OzRS48H4kLIQCP0//ZvGw1cwVz2sg==
+
 workbox-background-sync@^3.6.3:
   version "3.6.3"
   resolved "https://registry.yarnpkg.com/workbox-background-sync/-/workbox-background-sync-3.6.3.tgz#6609a0fac9eda336a7c52e6aa227ba2ae532ad94"

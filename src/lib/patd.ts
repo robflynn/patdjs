@@ -11,21 +11,7 @@ import GameData from "./game_data"
 import Item from './item'
 import Intent from './intent'
 import Inventory from './inventory'
-
-class IntentEngine extends GameObject {
-  constructor() {
-    super()
-  }
-
-  determineIntent(command: string): Intent | null {
-    let intents = Patd.shared().activeIntents.filter(intent => intent.isTriggeredBy(command))
-
-    if (!intents) { return null }
-    if (intents.length <= 0) { return null }
-
-    return intents[0]
-  }
-}
+import { IntentEngine } from './IntentEngine'
 
 export default class Patd extends GameObject {
   eventManager: EventManager
@@ -91,6 +77,10 @@ export default class Patd extends GameObject {
     intents.push(...this.inventory.items.flatMap((item: Item) => item.activeIntents))
 
     return intents
+  }
+
+  get registeredItems(): Item[] {
+    return [...this.rooms.flatMap((room) => room.items), ...this.inventory.items]
   }
 
   findRoom(roomId: Identifier) {

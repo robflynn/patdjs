@@ -7,6 +7,20 @@ import Patd from '../patd'
 export default class GetItemIntent extends Intent {
   item: Item
 
+  get actions(): string[] {
+    return [
+      'get',
+      'pickup',
+      'pick up',
+      'loot',
+      'grab',
+      'fetch',
+      'obtain',
+      'carry',
+      'gather',
+    ]
+  }
+
   get triggers(): string[] {
     const actions = [
       'get',
