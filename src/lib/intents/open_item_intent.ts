@@ -1,7 +1,6 @@
 const Event = require('../events')
 
 import Intent from "../intent"
-import Item from '../item'
 
 export default class OpenItemIntent extends Intent {
   get verbs(): string[] {
@@ -21,9 +20,13 @@ export default class OpenItemIntent extends Intent {
       return this.emit(Event.actionResponse, `It's already open.`)
     }
 
+    if (!item.open()) {
+      return this.emit(Event.actionResponse, `It won't open.`)
+    }
+
     this.emit(Event.playerOpenedItem, item)
     this.emit(Event.actionResponse, `You open ${item.nameWithArticle}.`)
 
-    return item.open()
+    return
   }
 }

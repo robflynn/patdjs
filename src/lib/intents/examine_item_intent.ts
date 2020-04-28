@@ -1,14 +1,11 @@
 const Event = require('../events')
 
 import Intent from '../intent'
-import Item from '../item'
 import Patd from '../patd'
 
 export default class ExamineItemIntent extends Intent {
-  item: Item
-
-  get triggers(): string[] {
-    const actions = [
+  get verbs(): string[] {
+    return [
       'look',
       'look at',
       'observe',
@@ -21,36 +18,12 @@ export default class ExamineItemIntent extends Intent {
       'gaze at',
       'gaze upon'
     ]
-
-    const articles = ['the', 'that']
-
-    let triggers: string[] = []
-
-    actions.forEach(action => {
-      triggers.push(`${action} ${this.item.name.toLowerCase()}`)
-
-      articles.forEach(article => triggers.push(`${action} ${article} ${this.item.name.toLowerCase()}`))
-
-      articles.forEach(article => {
-        if (this.item.aliases && this.item.aliases.length > 0) {
-          this.item.aliases.forEach((alias: string) => {
-            triggers.push(`${action} ${article} ${alias.toLowerCase()}`)
-          })
-        }
-      })
-    })
-
-    return triggers
   }
 
-  constructor(item: Item) {
-    super()
+  perform(tokens: any[]) {
+    let { item } = this.parse(tokens)
 
-    this.item = item
-  }
-
-  perform() {
-    const response = this.item.examine()
+    const response = item.examine()
 
     Patd.shared().eventManager.emit(Event.actionResponse, response)
   }
