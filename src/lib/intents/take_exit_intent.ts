@@ -5,7 +5,7 @@ import Exit from "../exit"
 export default class TakeExitIntent extends Intent {
   exit: Exit
 
-  get triggers() {
+  get verbs() {
     return this.exit.triggers
   }
 

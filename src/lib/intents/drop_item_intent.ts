@@ -5,39 +5,41 @@ import Item from '../item'
 import Patd from '../patd'
 
 export default class DropItemIntent extends Intent {
-  item: Item
-
-  get triggers(): string[] {
-    const actions = [
+  get verbs(): string[] {
+    return [
       'drop',
-      'discard'
+      'discard',
+      'place',
+      'put'
     ]
-
-    const triggers: string[] = []
-
-    actions.forEach((action: string) => {
-      triggers.push(`${action} ${this.item.name}`)
-      triggers.push(`${action} ${this.item.nameWithArticle}`)
-    })
-
-    return triggers.map((trigger: String) => trigger.toLowerCase())
   }
 
-  constructor(item: Item) {
-    super()
-
-    this.item = item
+  get prepositions(): string[] {
+    return [
+      'in',
+      'on',
+      'under',
+      'above',
+      'inside',
+      'through'
+    ]
   }
 
-  perform() {
-    let item = Patd.shared().inventory.removeItem(this.item)
-    if (!item) { return this.emit(Event.actionResponse, "You're not carrying that.") }
+  perform(tokens: any[]) {
+    let { item, preposition, target } = this.parse(tokens)
+
+    if (!Patd.shared().inventory.containsItem(item)) {
+      return this.emit(Event.actionResponse, "You're not carrying that.")
+    }
+
+    let theItem = Patd.shared().inventory.removeItem(item)
+
+    if (!theItem) { return this.emit(Event.actionResponse, "You can't drop that.") }
 
     Patd.shared().currentRoom.addItem(item)
 
     this.emit(Event.playerDroppedItem, item)
 
-    const response = `You drop ${item.nameWithArticle}`
-    this.emit(Event.actionResponse, response)
+    this.emit(Event.actionResponse, `You drop ${item.nameWithArticle}`)
   }
 }

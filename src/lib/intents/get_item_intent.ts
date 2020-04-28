@@ -21,7 +21,8 @@ export default class GetItemIntent extends Intent {
 
   get prepositions(): string[] {
     return [
-      'from'
+      'from',
+      'out'
     ]
   }
 

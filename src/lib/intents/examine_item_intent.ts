@@ -7,16 +7,14 @@ export default class ExamineItemIntent extends Intent {
   get verbs(): string[] {
     return [
       'look',
-      'look at',
       'observe',
       'examine',
       'inspect',
-      'check out',
+      'check',
       'describe',
       'analyze',
       'study',
-      'gaze at',
-      'gaze upon'
+      'gaze'
     ]
   }
 
