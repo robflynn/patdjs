@@ -51,13 +51,19 @@ export class IntentEngine {
   }
 
   prepareItem(item: any) {
-    let data = {
-      text: item.name,
-      entityType: 'item',
-      uid: item.id
-    }
+    const names = [item.name, ...item.aliases]
 
-    this.learn(data)
+    names.forEach(name => {
+      let data = {
+        text: name,
+        entityType: 'item',
+        uid: item.id
+      }
+
+      console.log(data)
+
+      this.learn(data)
+    })
   }
 
   learn(data: any) {
@@ -94,14 +100,21 @@ export class IntentEngine {
     const potentialIntents = tokens.filter((token: any) => token.entityType == 'action' )
                                    .map((token: any) => { return token.uid })
 
+    console.log(potentialIntents)
+
     const intentID = potentialIntents[0]
 
+    console.log(intentID)
+
     let intent = Patd.shared().findIntent(intentID)
+
+    console.log(intent)
 
     if (!intent) { return null }
 
     let { item, preposition, target } = this.parse(tokens)
 
+    console.log('wat ', intent)
     intent.perform(item, preposition, target)
 
     return null

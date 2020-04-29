@@ -12,6 +12,11 @@ import Item from './item'
 import Intent from './intent'
 import Inventory from './inventory'
 import { IntentEngine } from './IntentEngine'
+import {
+  GetItemIntent,
+  ExamineItemIntent,
+  DropItemIntent,
+ } from './intents'
 
 export default class Patd extends GameObject {
   eventManager: EventManager
@@ -48,6 +53,10 @@ export default class Patd extends GameObject {
     */
 
     this.engine = new IntentEngine()
+
+    this.registerIntent(new GetItemIntent())
+    this.registerIntent(new ExamineItemIntent())
+    this.registerIntent(new DropItemIntent())
   }
 
   get inventory(): Inventory {

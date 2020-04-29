@@ -23,7 +23,12 @@ export default {
     patd.eventManager.on(Event.playerEnteredRoom, (room) => {
       this.output(`<h1 style="font-size: 1.4em;">${room.name}</h1>`)
       this.output(room.fullDescription)
-      this.output(`\nObvious exits are: ${room.exits.map(exit => exit.direction).join(', ')}\n`)
+
+      if (room.exits.length > 0) {
+        this.output(`\nObvious exits are: ${room.exits.map(exit => exit.direction).join(', ')}\n`)
+      } else {
+        this.output('\nThere are no obvious exits.\n')
+      }
     })
   },
 
