@@ -186,11 +186,7 @@ export default class Patd extends GameObject {
   async process(command: string) {
     console.log("received input: ", command)
 
-    let intent = this.engine.determineIntent(command)
-
-    if (intent) {
-      intent.perform()
-    }
+    this.engine.determineIntent(command)
   }
 
   async determineUserIntent(command: string) {

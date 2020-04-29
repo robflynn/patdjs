@@ -94,16 +94,50 @@ export class IntentEngine {
     const potentialIntents = tokens.filter((token: any) => token.entityType == 'action' )
                                    .map((token: any) => { return token.uid })
 
-    potentialIntents.forEach((potentialIntent: any) => {
+    const intentID = potentialIntents[0]
 
-      console.log('checking: potentialIntent: ', potentialIntent)
-      let intent = Patd.shared().findIntent(potentialIntent)
-      console.log(Patd.shared().activeIntents)
-      console.log(intent)
+    let intent = Patd.shared().findIntent(intentID)
 
-      intent.perform(tokens)
-    })
+    if (!intent) { return null }
+
+    let { item, preposition, target } = this.parse(tokens)
+
+    intent.perform(item, preposition, target)
 
     return null
+  }
+
+  private parse(tokens: any): any {
+    let directObject = null
+    let target: any = null
+    let preposition = null
+    let prepositionSeen = false
+
+    tokens.forEach((token: any) => {
+      if (token.entityType == 'preposition') {
+        prepositionSeen = true
+        preposition = token.uid
+
+        return
+      }
+
+      if (token.entityType == 'item') {
+        if (prepositionSeen && target == null) {
+          target = Patd.shared().findItem(token.uid)
+
+          return
+        }
+
+        directObject = Patd.shared().findItem(token.uid)
+
+        return
+      }
+    })
+
+    return {
+      item: directObject,
+      preposition: prepositionSeen ? preposition: null,
+      target: target
+    }
   }
 }

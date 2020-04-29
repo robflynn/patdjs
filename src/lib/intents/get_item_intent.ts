@@ -26,8 +26,10 @@ export default class GetItemIntent extends Intent {
     ]
   }
 
-  perform(tokens: any[]) {
-    let { item, preposition, target } = this.parse(tokens)
+  perform(item?: Item, preposition?: string, target?: Item) {
+    if (!item) {
+      return this.emit(Event.actionResponse, 'Get what?')
+    }
 
     // Makee sure we can get the item
     let theItem = item.pickUp()

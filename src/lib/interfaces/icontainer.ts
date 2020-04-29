@@ -20,6 +20,10 @@ export const Container: IContainer = {
 
     this.items.splice(index, 1)
 
+    if (item.parentContainer == this) {
+      item.parentContainer = undefined
+    }
+
     return item
   },
 

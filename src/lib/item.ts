@@ -1,11 +1,4 @@
 import GameObject from './game_object'
-import {
-  ExamineItemIntent,
-  GetItemIntent,
-  DropItemIntent,
-  OpenItemIntent
-} from './intents'
-
 import IContainer from './interfaces/icontainer'
 import { Openable } from './interfaces/openable'
 
@@ -51,11 +44,6 @@ class Item extends GameObject {
 
     this.name = name
     this.traits = []
-
-    this.registerIntent(new ExamineItemIntent(this))
-    this.registerIntent(new GetItemIntent(this))
-    this.registerIntent(new DropItemIntent(this))
-    this.registerIntent(new OpenItemIntent(this))
   }
 
   examine(): string {
