@@ -27,6 +27,7 @@ export default class Patd extends GameObject {
   private engine: IntentEngine
 
   private _objects: any = {}
+  private _itemTypes: any = {}
 
   private static _instance: Patd
 
@@ -117,6 +118,7 @@ export default class Patd extends GameObject {
   }
 
   findObject(id: any): GameObject | null {
+    console.log('looking for ', id)
     if (this._objects.hasOwnProperty(id)) {
       return this._objects[id]
     }
@@ -129,12 +131,19 @@ export default class Patd extends GameObject {
 
     if (object == null) { return null }
 
+    console.log(`finding: ${id} --> `, object)
+
     if (object instanceof Item) { return object }
 
     return null
   }
 
+  registerItemType(name: string, type: any) {
+    this._itemTypes[name] = type
+  }
+
   registerObject(object: GameObject) {
+    console.log('registering object: ', object)
     this._objects[object.id] = object
   }
 
@@ -167,19 +176,23 @@ export default class Patd extends GameObject {
   }
 
   buildItem(itemData: any): Item {
-    let item = new Item(itemData.name)
+    let item = this.findItem(itemData.id)
 
-    item.description = itemData.description
-    item.environmental = itemData.environmental
-    item.aliases = itemData.aliases
+    if (!item) {
+      item = new Item(itemData.name)
+      item.description = itemData.description
+      item.environmental = itemData.environmental
+      item.aliases = itemData.aliases
+      item.id = itemData.id
 
-    if (itemData.traits) {
-      item.traits = itemData.traits
+      if (itemData.traits) {
+        item.traits = itemData.traits
+      }
+
+      Patd.shared().registerObject(item)
     }
 
     console.log(item)
-
-    Patd.shared().registerObject(item)
 
     return item
   }

@@ -7,6 +7,8 @@ import PlayerInput from './components/player_input'
 import Inventory from './components/inventory'
 import Console from './components/console'
 
+import SpecialThing from './items/special'
+
 const gameData = require('./lib/data')
 
 const patd = Patd.shared()
@@ -46,6 +48,7 @@ export default {
 			this.setCurrentRoom(room)
 		})
 
+		this.patd.registerObject(new SpecialThing())
 		this.patd.loadGame(gameData)
 	},
 }

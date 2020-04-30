@@ -12,6 +12,10 @@ module.exports = {
                   environmental: 'A smelly pair of denim rests in the corner.',
                   traits: ['gettable'],
                   aliases: ['jeans', 'pants']
+              },
+              {
+                  id: 'special',
+                  name: 'special thing',
               }
           ]
       }

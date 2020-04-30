@@ -4,18 +4,18 @@ import { Openable } from './interfaces/openable'
 
 import { use } from "typescript-mix";
 
-enum Trait {
+export enum Trait {
   gettable = "gettable",
   openable = "openable",
   container = "container",
 }
 
-class Item extends GameObject {
+export default class Item extends GameObject {
   [x: string]: any;
   @use( Openable ) this: any
 
   name: string
-  aliases?: string[]
+  aliases: string[] = []
   description?: string
   environmental?: string
 
@@ -72,5 +72,3 @@ class Item extends GameObject {
     return this
   }
 }
-
-export default Item
