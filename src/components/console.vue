@@ -49,6 +49,7 @@ export default {
   padding: 0.75em;
   width: 100%;
   flex-grow: 1;
+  overflow-y: auto;
 
   font-family: monospace;
   font-size: 1.2em;

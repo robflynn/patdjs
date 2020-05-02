@@ -3,7 +3,7 @@ module.exports = {
       {
           id: 'start',
           name: 'Your bedroom',
-          description: "It's dirty!",
+          description: "It's dirty!\n\n",
           items: [
               {
                   id: 'jeans',

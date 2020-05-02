@@ -5,35 +5,22 @@ import Patd from '../patd';
 import Room from '../room'
 
 export default class ExamineRoomIntent extends Intent {
-  get triggers(): string[] {
+  get verbs(): string[] {
+    // TODO: Maybe rooms should just be examinable just like objects
     return [
-      "examine room",
-      "look around",
-       "look at surroundings",
-       "look at my surroundings",
-       "look around the room",
-       "look at room",
-       "look",
-       "what's around me",
-       "what is around me",
-       "describe my surroundings",
-       "describe surroundings"
+      'l'
     ]
   }
 
   get room(): Room {
-    return this._room
+    return Patd.shared().currentRoom
   }
 
-  private _room: Room
-
-  constructor(room: Room) {
+  constructor() {
     super()
-
-    this._room = room
   }
 
   perform() {
-    Patd.shared().eventManager.emit(Event.actionResponse,this.room.examine())
+    Patd.shared().eventManager.emit(Event.actionResponse, this.room.examine())
   }
 }

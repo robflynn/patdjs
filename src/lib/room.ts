@@ -62,8 +62,6 @@ ${this.environmentalDescriptors}
     super()
 
     this.exits = []
-
-    this.registerIntent(new ExamineRoomIntent(this))
   }
 
   get environmentalDescriptors(): string {

@@ -4,8 +4,43 @@ import Item from "@/lib/item"
 import { Trait } from "@/lib/item"
 import Intent from '@/lib/intent'
 
+export class Slurm extends Item {
+  id = "slurm"
+  description = "It is highly addictive!"
+  environmental = "A can of slurm hovers slightly above the ground."
+
+  constructor() {
+    super("slurm")
+
+    this.traits = [
+      Trait.gettable,
+      Trait.openable,
+      Trait.drinkable
+    ]
+  }
+
+  drink() {
+    const response:string = `.
+    |
+    |
+ ,-'"'-.
+,'       '.
+|  _____  |      .-( HEY baby,lets go out)
+| (_o_o_) |    ,'    ( and kill all humans.)
+|         | ,-'
+| |HHHHH| |
+| |HHHHH| |
+-''-._____.-''-
+`
+
+    this.emit(Event.actionResponse, response)
+    this.emit(Event.actionResponse, "(Programmers note: That was supposed to be Bender but I'm leaving it because that's hilarious.")
+  }
+}
+
 export default class SpecialThing extends Item {
   timesTurned: number = 0
+  private slurm: Slurm
 
   get description(): string {
     let description = 'This thing is fairly special, I think. '
@@ -25,7 +60,10 @@ export default class SpecialThing extends Item {
     this.id = 'special'
 
     this.environmental = 'Some kind of special thing is being special over there.'
-    this.traits = [Trait.gettable]
+    this.traits = [Trait.gettable, Trait.openable]
+
+    this.slurm = new Slurm()
+    Patd.shared().registerObject(this.slurm)
 
     // TODO: Make this prettier
     this.registerIntent(Intent.createIntent(
@@ -40,10 +78,14 @@ export default class SpecialThing extends Item {
 
         if (this.timesTurned == 1) {
           this.emit(Event.actionResponse, 'The ground begins to trumble beneath your feet.')
+
+          console.log(this.slurm)
         }
 
         if (this.timesTurned == 2) {
           this.emit(Event.actionResponse, 'Drink more slurm.')
+
+          this.spawnSlurm()
         }
 
         if (this.timesTurned == 43) {
@@ -53,5 +95,11 @@ export default class SpecialThing extends Item {
         this.timesTurned++
       }
     ))
+  }
+
+  spawnSlurm() {
+    Patd.shared().currentRoom.addItem(this.slurm)
+
+    this.emit(Event.actionResponse, this.slurm.environmental)
   }
 }

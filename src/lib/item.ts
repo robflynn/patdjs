@@ -1,6 +1,7 @@
 import GameObject from './game_object'
 import IContainer from './interfaces/icontainer'
 import { Openable } from './interfaces/openable'
+import { Drinkable } from './interfaces/drinkable'
 
 import { use } from "typescript-mix";
 
@@ -8,11 +9,13 @@ export enum Trait {
   gettable = "gettable",
   openable = "openable",
   container = "container",
+  drinkable = "drinkable",
 }
 
 export default class Item extends GameObject {
   [x: string]: any;
   @use( Openable ) this: any
+  @use( Drinkable ) this: any
 
   name: string
   aliases: string[] = []
@@ -25,6 +28,10 @@ export default class Item extends GameObject {
 
   get isOpenable(): boolean {
     return this.traits.includes(Trait.openable)
+  }
+
+  get isDrinkable(): boolean {
+    return this.traits.includes(Trait.drinkable)
   }
 
   get affectsEnvironment(): boolean {

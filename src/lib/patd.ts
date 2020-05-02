@@ -16,6 +16,9 @@ import {
   GetItemIntent,
   ExamineItemIntent,
   DropItemIntent,
+  DrinkItemIntent,
+  OpenItemIntent,
+  ExamineRoomIntent,
  } from './intents'
 
 export default class Patd extends GameObject {
@@ -58,6 +61,9 @@ export default class Patd extends GameObject {
     this.registerIntent(new GetItemIntent())
     this.registerIntent(new ExamineItemIntent())
     this.registerIntent(new DropItemIntent())
+    this.registerIntent(new OpenItemIntent())
+    this.registerIntent(new DrinkItemIntent())
+    this.registerIntent(new ExamineRoomIntent())
   }
 
   get inventory(): Inventory {
@@ -207,6 +213,8 @@ export default class Patd extends GameObject {
 
   async process(command: string) {
     console.log("received input: ", command)
+
+    this.emit(Event.actionResponse, `> ${command}`)
 
     this.engine.determineIntent(command)
   }
