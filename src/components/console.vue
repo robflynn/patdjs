@@ -18,6 +18,9 @@ export default {
     patd.eventManager.on(Event.actionResponse, (data) => {
       this.output(data)
       this.output('')
+      setTimeout(() => {
+        this.$refs.console.scrollTop = this.$refs.console.scrollHeight
+      }, 100)
     })
 
     patd.eventManager.on(Event.playerEnteredRoom, (room) => {
